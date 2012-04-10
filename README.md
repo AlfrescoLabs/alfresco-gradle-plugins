@@ -1,18 +1,18 @@
-Overview
-========
+# Overview
+
 
 Adds tasks to [Gradle](http://gradle.org) projects which help in compiling, assembling,
 and packaging extensions to Alfresco, particularly those deployed as
 [Alfresco AMP](http://wiki.alfresco.com/wiki/AMP_Files) projects.
 
-###Installing this Project
+### Installing this Project
 
 To build this project and install in your local maven repo run:
 
 	gradle install
 	
 
-###Adding the Plugins to Your Project
+### Adding the Plugins to Your Project
 
 In your build.gradle add:
 
@@ -39,25 +39,25 @@ then add each plugin you want to use:
 
 
 
-`amp` Task
-==========
+# `amp` Task
+
 
 The `amp` task packages an Alfresco AMP for deployment via the Module Management Tool.
 
-###Running the `amp` Task
+### Running the `amp` Task
 
 To compile and package your AMP project run:
 
 	gradle amp
 
-###Project Layout
+### Project Layout
 
 The standard [Gradle Java plugin project layout](http://gradle.org/docs/current/userguide/java_plugin.html#N11D6B)
 is assumed and `project.name` is used as your AMP module id by default.  
 
 You can override these in `gradle.properties`.
 
-###Properties
+### Properties
 
 <table>
 	<tr>
@@ -81,7 +81,7 @@ You can override these in `gradle.properties`.
 	<tr>
 		<td><code>sourceConfigModuleDir</code></td>
 		<td>String</td>
-		<td><code>*sourceConfigDir*/alfresco/module/*moduleId*</code></td>
+		<td><code><em>sourceConfigDir</em>/alfresco/module/<em>moduleId</em></code></td>
 		<td>The source directory for AMP module-specific configuration files</td>
 	</tr>
 	<tr>
@@ -110,14 +110,14 @@ You can override these in `gradle.properties`.
 	</tr>
 </table>
 
-###Coming From Maven Archetypes
+### Coming From Maven Archetypes
 
 If your project was created by the Alfresco Maven archetypes you can set `fromMavenArchetype`
 to true in your gradle.properties file and you can maintain the same project structure and files
 you've used before.  The velocity template paramters will also be expanded within your 
 `module.properties` and `module-context.xml` files.
 
-###Related Tasks
+### Related Tasks
 
 <table>
 	<tr>
@@ -137,19 +137,18 @@ you've used before.  The velocity template paramters will also be expanded withi
 
 
 
-`explodeWarDependencies` Task
-=============================
+# `explodeWarDependencies` Task
 
 The `explodeWarDependencies` task extracts the jars and configs from the WAR file specified in warFile
 to be used as dependencies in the project.
 
-###Running the `explodeWarDependencies` Task
+### Running the `explodeWarDependencies` Task
 
 To extract the configs and jars from a war file run:
 
 	gradle explodeWarDependencies
 		
-###Properties
+### Properties
 
 <table>
 	<tr>
@@ -173,19 +172,18 @@ To extract the configs and jars from a war file run:
 	<tr>
 		<td><code>explodedLibsDir</code></td>
 		<td>String</td>
-		<td><code>*explodedDependenciesDir*/lib</code></td>
+		<td><code><em>explodedDependenciesDir</em>/lib</code></td>
 		<td>The path to the directory where the extracted jars should be placed</td>
 	</tr>
 	<tr>
 		<td><code>explodedConfigDir</code></td>
 		<td>String</td>
-		<td><code>*explodedDependenciesDir*/config</code></td>
+		<td><code><em>explodedDependenciesDir</em>/config</code></td>
 		<td>The path to the directory where the extracted configuration files should be placed</td>
 	</tr>
 </table>
 
-###Related Tasks
--------------
+### Related Tasks
 
 <table>
 	<tr>
@@ -193,14 +191,13 @@ To extract the configs and jars from a war file run:
 		<td><strong>Description</strong></td>
 	</tr>
 	<tr>
-		<td>`cleanExplodeWarDependencies`</td>
+		<td><code>cleanExplodeWarDependencies</code></td>
 		<td>Deletes the jars and configs extracted from the WAR file</td>
 	</tr>
 </table>
 
 
-License
-=======
+# License
 
 Copyright (C) 2005-2012 Alfresco Software Limited.
 
