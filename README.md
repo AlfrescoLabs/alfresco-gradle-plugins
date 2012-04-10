@@ -5,31 +5,32 @@ Adds tasks to [Gradle](http://gradle.org) projects which help in compiling, asse
 and packaging extensions to Alfresco, particularly those deployed as
 [Alfresco AMP](http://wiki.alfresco.com/wiki/AMP_Files) projects.
 
-Installing this Project
------------------------
+###Installing this Project
 
 To build this project and install in your local maven repo run:
 
 		gradle install
 	
 
-Adding the Plugins to Your Project
-----------------------------------
+###Adding the Plugins to Your Project
 
 In your build.gradle add:
 
-		buildscript {
-			repositories {
-				mavenLocal()
-			}
-			dependencies {
-				classpath group: 'org.alfresco.gradle', name: 'amp-plugin', version: '1.0-SNAPSHOT'
-			}
-		}
-		buildscript {
-		   configurations.classpath.resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-		}
-		
+```groovy
+buildscript {
+	repositories {
+		mavenLocal()
+	}
+	dependencies {
+		classpath group: 'org.alfresco.gradle', name: 'amp-plugin', version: '1.0-SNAPSHOT'
+	}
+}
+buildscript {
+   configurations.classpath.resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+```
+
+
 then add each plugin you want to use:
 
 		apply plugin: 'alfresco-war-dependencies'
