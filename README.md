@@ -5,10 +5,15 @@ Adds tasks to [Gradle](http://gradle.org) projects which help in compiling, asse
 and packaging extensions to Alfresco, particularly those deployed as
 [Alfresco AMP](http://wiki.alfresco.com/wiki/AMP_Files) projects.
 
+### Requirements
+
+The project currently requires that Gradle and [Maven](http://maven.apache.org) be installed.
+
 ### Installing this Project
 
 To build this plugins project and install in your local maven repo run:
 
+	cd alfresco-gradle-plugins
 	gradle install
 	
 
@@ -50,9 +55,10 @@ The `amp` task packages an Alfresco AMP for deployment via the Module Management
 
 To compile and package run the following from your AMP project:
 
+	cd *my-amp-project*
 	gradle amp
 	
-The packed AMP will be available at `build/distributions/*moduleId*-*version*.amp` by default.
+The packed AMP will be available at `build/distributions/<em>moduleId</em>-<em>version</em>.amp` by default.
 
 ### Project Layout
 
@@ -119,7 +125,7 @@ The plugin also uses many of the [convention properties](http://gradle.org/docs/
 If your project was created by the Alfresco Maven archetypes you can set `fromMavenArchetype`
 to true in your gradle.properties file and maintain the same project structure and files
 you've used before.  The archetype's file mapping during assembly of the AMP 
-(i.e. `src/main/config/context` -> `config/alfresco/module/*moduleId*` within the AMP) will be
+(i.e. `src/main/config/context` -> `config/alfresco/module/<em>moduleId</em>` within the AMP) will be
 maintined and velocity template paramters will also be expanded within your 
 `module.properties` and `module-context.xml` files.
 
@@ -132,7 +138,8 @@ maintined and velocity template paramters will also be expanded within your
 	</tr>
 	<tr>
 		<td><code>setBuildNumberFromSvnRevision</code></td>
-		<td>Uses Subversion to set `project.buildNumber` to the last revision if available, otherwise zero</td>
+		<td>Uses Subversion to set <code>project.buildNumber</code> to the last revision if available, 
+		otherwise zero</td>
 	</tr>
 	<tr>
 		<td><code>assembleAmp</code></td>
@@ -143,15 +150,15 @@ maintined and velocity template paramters will also be expanded within your
 
 
 
-`explodeWarDependencies` Task
------------------------------
+Task: `explodeWarDependencies`
+------------------------------
 
 The `explodeWarDependencies` task extracts the jars and configs from the WAR file specified in warFile
 to be used as dependencies in the project.
 
 ### Running the `explodeWarDependencies` Task
 
-To extract the configs and jars from a war file run:
+To extract the configs and jars from a war file run the following from your project:
 
 	gradle explodeWarDependencies
 		
