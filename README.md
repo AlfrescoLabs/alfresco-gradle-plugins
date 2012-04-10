@@ -1,5 +1,5 @@
-# Overview
-
+Overview
+--------
 
 Adds tasks to [Gradle](http://gradle.org) projects which help in compiling, assembling,
 and packaging extensions to Alfresco, particularly those deployed as
@@ -39,7 +39,8 @@ then add each plugin you want to use:
 
 
 
-# `amp` Task
+`amp` Task
+----------
 
 
 The `amp` task packages an Alfresco AMP for deployment via the Module Management Tool.
@@ -137,7 +138,8 @@ you've used before.  The velocity template paramters will also be expanded withi
 
 
 
-# `explodeWarDependencies` Task
+`explodeWarDependencies` Task
+-----------------------------
 
 The `explodeWarDependencies` task extracts the jars and configs from the WAR file specified in warFile
 to be used as dependencies in the project.
@@ -197,7 +199,8 @@ To extract the configs and jars from a war file run:
 </table>
 
 
-# License
+License
+-------
 
 Copyright (C) 2005-2012 Alfresco Software Limited.
 
@@ -205,7 +208,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
