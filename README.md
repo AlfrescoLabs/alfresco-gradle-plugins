@@ -9,7 +9,7 @@ and packaging extensions to Alfresco, particularly those deployed as
 
 To build this project and install in your local maven repo run:
 
-		gradle install
+	gradle install
 	
 
 ###Adding the Plugins to Your Project
@@ -32,9 +32,10 @@ buildscript {
 
 
 then add each plugin you want to use:
-
+```groovy
 		apply plugin: 'alfresco-war-dependencies'
 		apply plugin: 'amp'
+```
 
 
 
@@ -43,97 +44,92 @@ then add each plugin you want to use:
 
 The `amp` task packages an Alfresco AMP for deployment via the Module Management Tool.
 
-Running the `amp` Task
-----------------------
+###Running the `amp` Task
 
 To compile and package your AMP project run:
 
-		gradle amp
+	gradle amp
 
-Project Layout
---------------
+###Project Layout
 
 The standard [Gradle Java plugin project layout](http://gradle.org/docs/current/userguide/java_plugin.html#N11D6B)
 is assumed and `project.name` is used as your AMP module id by default.  
 
 You can override these in `gradle.properties`.
 
-Properties
-----------
+###Properties
 
 <table>
 	<tr>
-		<td>Property name</td>
-		<td>Type</td>
-		<td>Default value</td>
-		<td>Description</td>
+		<td><strong>Property name</strong></td>
+		<td><strong>Type</strong></td>
+		<td><strong>Default value</strong></td>
+		<td><strong>Description</strong></td>
 	</tr>
 	<tr>
-		<td>`moduleId`</td>
+		<td><code>moduleId</code></td>
 		<td>String</td>
-		<td>`project.name`</td>
+		<td><code>project.name</code></td>
 		<td>The AMP module id</td>
 	</tr>
 	<tr>
-		<td>`sourceConfigDir`</td>
+		<td><code>sourceConfigDir</code></td>
 		<td>String</td>
-		<td>`src/main/config`</td>
+		<td><code>src/main/config</code></td>
 		<td>The source directory for configuration files</td>
 	</tr>
 	<tr>
-		<td>`sourceConfigModuleDir`</td>
+		<td><code>sourceConfigModuleDir</code></td>
 		<td>String</td>
-		<td>`*sourceConfigDir*/alfresco/module/*moduleId*`</td>
+		<td><code>*sourceConfigDir*/alfresco/module/*moduleId*</code></td>
 		<td>The source directory for AMP module-specific configuration files</td>
 	</tr>
 	<tr>
-		<td>`sourceWebDir`</td>
+		<td><code>sourceWebDir</code></td>
 		<td>String</td>
-		<td>`src/main/web`</td>
+		<td><code>src/main/web</code></td>
 		<td>The source directory for web files such as JSP, CSS, and JavaScript files</td>
 	</tr>
 	<tr>
-		<td>`dependencyLibsDir`</td>
+		<td><code>dependencyLibsDir</code></td>
 		<td>String</td>
-		<td>`lib`</td>
+		<td><code>lib</code></td>
 		<td>Directory containing jar files that should be copied into the AMP for deployment</td>
 	</tr>
 	<tr>
-		<td>`licensesDir`</td>
+		<td><code>licensesDir</code></td>
 		<td>String</td>
-		<td>`licenses`</td>
+		<td><code>licenses</code></td>
 		<td>Directory containing license files that should be copied into the AMP for deployment</td>
 	</tr>
 	<tr>
-		<td>`fromMavenArchetype`</td>
+		<td><code>fromMavenArchetype</code></td>
 		<td>Boolean</td>
-		<td>`false`</td>
+		<td><code>false</code></td>
 		<td>Whether or not this project was create from the Alfresco Maven archetypes</td>
 	</tr>
 </table>
 
-Coming From Maven Archetypes
-----------------------------
+###Coming From Maven Archetypes
 
 If your project was created by the Alfresco Maven archetypes you can set `fromMavenArchetype`
 to true in your gradle.properties file and you can maintain the same project structure and files
 you've used before.  The velocity template paramters will also be expanded within your 
 `module.properties` and `module-context.xml` files.
 
-Related Tasks
--------------
+###Related Tasks
 
 <table>
 	<tr>
-		<td>Task</td>
-		<td>Description</td>
+		<td><strong>Task</strong></td>
+		<td><strong>Description</strong></td>
 	</tr>
 	<tr>
-		<td>`setBuildNumberFromSvnRevision`</td>
+		<td><code>setBuildNumberFromSvnRevision</code></td>
 		<td>Uses Subversion to set `project.buildNumber` to the last revision if available, otherwise zero</td>
 	</tr>
 	<tr>
-		<td>`buildAmp`</td>
+		<td><code>buildAmp</code></td>
 		<td>Does the work of assembling the AMP structure but does not zip into a deployable .amp file</td>
 	</tr>
 </table>
@@ -147,59 +143,57 @@ Related Tasks
 The `explodeWarDependencies` task extracts the jars and configs from the WAR file specified in warFile
 to be used as dependencies in the project.
 
-Running the `explodeWarDependencies` Task
-----------------------
+###Running the `explodeWarDependencies` Task
 
 To extract the configs and jars from a war file run:
 
-		gradle explodeWarDependencies
+	gradle explodeWarDependencies
 		
-Properties
-----------
+###Properties
 
 <table>
 	<tr>
-		<td>Property name</td>
-		<td>Type</td>
-		<td>Default value</td>
-		<td>Description</td>
+		<td><strong>Property nam</strong>e</td>
+		<td><strong>Type</strong></td>
+		<td><strong>Default value</strong></td>
+		<td><strong>Description</strong></td>
 	</tr>
 	<tr>
-		<td>`warFile`</td>
+		<td><code>warFile</code></td>
 		<td>String</td>
-		<td>`alfresco.war`</td>
+		<td><code>alfresco.war</code></td>
 		<td>The path to the WAR file that should be used as a dependencies source</td>
 	</tr>
 	<tr>
-		<td>`explodedDependenciesDir`</td>
+		<td><code>explodedDependenciesDir</code></td>
 		<td>String</td>
-		<td>`explodedDependencies`</td>
+		<td><code>explodedDependencies</code></td>
 		<td>The path to the directory where the extracted dependencies should be placed</td>
 	</tr>
 	<tr>
-		<td>`explodedLibsDir`</td>
+		<td><code>explodedLibsDir</code></td>
 		<td>String</td>
-		<td>`*explodedDependenciesDir*/lib`</td>
+		<td><code>*explodedDependenciesDir*/lib</code></td>
 		<td>The path to the directory where the extracted jars should be placed</td>
 	</tr>
 	<tr>
-		<td>`explodedConfigDir`</td>
+		<td><code>explodedConfigDir</code></td>
 		<td>String</td>
-		<td>`*explodedDependenciesDir*/config`</td>
+		<td><code>*explodedDependenciesDir*/config</code></td>
 		<td>The path to the directory where the extracted configuration files should be placed</td>
 	</tr>
 </table>
 
-Related Tasks
+###Related Tasks
 -------------
 
 <table>
 	<tr>
-		<td>Task</td>
-		<td>Description</td>
+		<td><strong>Task</strong></td>
+		<td><strong>Description</strong></td>
 	</tr>
 	<tr>
-		<td>`cleanWarDependencies`</td>
+		<td>`cleanExplodeWarDependencies`</td>
 		<td>Deletes the jars and configs extracted from the WAR file</td>
 	</tr>
 </table>
@@ -208,5 +202,17 @@ Related Tasks
 License
 =======
 
-Apache 2
+Copyright (C) 2005-2012 Alfresco Software Limited.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
