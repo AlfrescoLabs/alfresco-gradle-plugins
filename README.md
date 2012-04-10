@@ -147,6 +147,10 @@ maintined and velocity template paramters will also be expanded within your
 	</tr>
 </table>
 
+### Example Project
+
+Checkout the [amp-gradle-example](https://github.com/Alfresco/amp-gradle-example) project for an example on how to use the Gradle amp plugin.
+
 
 
 
@@ -154,13 +158,18 @@ Task: `explodeWarDependencies`
 ------------------------------
 
 The `explodeWarDependencies` task extracts the jars and configs from the WAR file specified in warFile
-to be used as dependencies in the project.
+to be used as dependencies in the project.  A `compile` dependency on all jars in `explodedLibsDir` is 
+also added to the project.
 
 ### Running the `explodeWarDependencies` Task
 
-To extract the configs and jars from a war file run the following from your project:
+To extract the configs and jars from `warFile` place the WAR in the root of your project and run the following:
 
+	cd *my-amp-project*
 	gradle explodeWarDependencies
+	
+By default the task is looking for `alfresco.war` and the extracted files will be available at 
+`explodedDependencies`.  You can override these defaults in `gradle.properties`.
 		
 ### Properties
 
