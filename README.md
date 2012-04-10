@@ -39,8 +39,8 @@ buildscript {
 then add each plugin you want to use:
 
 ```groovy
-	apply plugin: 'alfresco-war-dependencies'
-	apply plugin: 'amp'
+apply plugin: 'alfresco-war-dependencies'
+apply plugin: 'amp'
 ```
 
 
@@ -58,7 +58,7 @@ To compile and package run the following from your AMP project:
 	cd *my-amp-project*
 	gradle amp
 	
-The packed AMP will be available at `build/distributions/<em>moduleId</em>-<em>version</em>.amp` by default.
+The packed AMP will be available at `build/distributions/*moduleId*-*version*.amp` by default.
 
 ### Project Layout
 
@@ -125,7 +125,7 @@ The plugin also uses many of the [convention properties](http://gradle.org/docs/
 If your project was created by the Alfresco Maven archetypes you can set `fromMavenArchetype`
 to true in your gradle.properties file and maintain the same project structure and files
 you've used before.  The archetype's file mapping during assembly of the AMP 
-(i.e. `src/main/config/context` -> `config/alfresco/module/<em>moduleId</em>` within the AMP) will be
+(i.e. `src/main/config/context` -> `config/alfresco/module/*moduleId*` within the AMP) will be
 maintined and velocity template paramters will also be expanded within your 
 `module.properties` and `module-context.xml` files.
 
