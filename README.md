@@ -7,14 +7,14 @@ and packaging extensions to Alfresco, particularly those deployed as
 
 ### Installing this Project
 
-To build this project and install in your local maven repo run:
+To build this plugins project and install in your local maven repo run:
 
 	gradle install
 	
 
 ### Adding the Plugins to Your Project
 
-In your build.gradle add:
+In the `build.gradle` file of your project add:
 
 ```groovy
 buildscript {
@@ -32,31 +32,32 @@ buildscript {
 
 
 then add each plugin you want to use:
+
 ```groovy
-		apply plugin: 'alfresco-war-dependencies'
-		apply plugin: 'amp'
+	apply plugin: 'alfresco-war-dependencies'
+	apply plugin: 'amp'
 ```
 
 
 
-`amp` Task
-----------
+Task: `amp`
+-----------
 
 
 The `amp` task packages an Alfresco AMP for deployment via the Module Management Tool.
 
 ### Running the `amp` Task
 
-To compile and package your AMP project run:
+To compile and package run the following from your AMP project:
 
 	gradle amp
+	
+The packed AMP will be available at `build/distributions/*moduleId*-*version*.amp` by default.
 
 ### Project Layout
 
-The standard [Gradle Java plugin project layout](http://gradle.org/docs/current/userguide/java_plugin.html#N11D6B)
-is assumed and `project.name` is used as your AMP module id by default.  
-
-You can override these in `gradle.properties`.
+The standard Gradle Java plugin [project layout](http://gradle.org/docs/current/userguide/java_plugin.html#N11D6B)
+is assumed and `project.name` is used as your AMP module id by default. You can override these properties in `gradle.properties`.
 
 ### Properties
 
@@ -111,11 +112,15 @@ You can override these in `gradle.properties`.
 	</tr>
 </table>
 
+The plugin also uses many of the [convention properties](http://gradle.org/docs/current/userguide/java_plugin.html#N11E90) from the Java plugin.
+
 ### Coming From Maven Archetypes
 
 If your project was created by the Alfresco Maven archetypes you can set `fromMavenArchetype`
-to true in your gradle.properties file and you can maintain the same project structure and files
-you've used before.  The velocity template paramters will also be expanded within your 
+to true in your gradle.properties file and maintain the same project structure and files
+you've used before.  The archetype's file mapping during assembly of the AMP 
+(i.e. `src/main/config/context` -> `config/alfresco/module/*moduleId*` within the AMP) will be
+maintined and velocity template paramters will also be expanded within your 
 `module.properties` and `module-context.xml` files.
 
 ### Related Tasks
@@ -130,7 +135,7 @@ you've used before.  The velocity template paramters will also be expanded withi
 		<td>Uses Subversion to set `project.buildNumber` to the last revision if available, otherwise zero</td>
 	</tr>
 	<tr>
-		<td><code>buildAmp</code></td>
+		<td><code>assembleAmp</code></td>
 		<td>Does the work of assembling the AMP structure but does not zip into a deployable .amp file</td>
 	</tr>
 </table>
