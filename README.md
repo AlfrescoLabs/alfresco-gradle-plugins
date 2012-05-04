@@ -45,8 +45,8 @@ apply plugin: 'amp'
 
 
 
-Task: `amp`
------------
+Plugin: `amp`, Task: `amp`
+--------------------------
 
 
 The `amp` task packages an Alfresco AMP for deployment via the Module Management Tool.
@@ -127,18 +127,6 @@ You can override these properties in `gradle.properties`.
 
 The plugin also uses many of the [convention properties](http://gradle.org/docs/current/userguide/java_plugin.html#N11E90) from the Java plugin.
 
-Task: `deployDevelopmentAmp`
------------
-
-
-The `deployDevelopmentAmp` task copies the files in your AMP project directly into a specified exploded WAR
-for development purposes only.  The changes can not be revoked, and no file-mapping.properties directives are followed.
-
-The path to the exploded WAR is set in the `developmentExplodedWar` property and can be specified on the command line:
-
-	gradle deployDevelopmentAmp -PdevelopmentExplodedWar=/Path/To/Exploded/WAR
-
-
 ### Coming From Maven Archetypes
 
 If your project was created by the Alfresco Maven archetypes you can set `fromMavenArchetype`
@@ -171,10 +159,20 @@ maintined and velocity template paramters will also be expanded within your
 Checkout the [amp-gradle-example](https://github.com/Alfresco/amp-gradle-example) project for an example on how to use the Gradle amp plugin.
 
 
+Plugin: `amp`, Task: `deployDevelopmentAmp`
+-------------------------------------------
 
 
-Task: `explodeWarDependencies`
-------------------------------
+The `deployDevelopmentAmp` task copies the files in your AMP project directly into a specified exploded WAR
+for development purposes only.  The changes can not be revoked, and no file-mapping.properties directives are followed.
+
+The path to the exploded WAR is set in the `developmentExplodedWar` property and can be specified on the command line:
+
+	gradle deployDevelopmentAmp -PdevelopmentExplodedWar=/Path/To/Exploded/WAR
+
+
+Plugin: `alfresco-war-dependencies`, Task: `explodeWarDependencies`
+-------------------------------------------------------------------
 
 The `explodeWarDependencies` task extracts the jars and configs from the WAR file specified in warFile
 to be used as dependencies in the project.  A `compile` dependency on all jars in `explodedLibsDir` is 
