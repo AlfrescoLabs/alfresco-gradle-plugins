@@ -127,6 +127,18 @@ You can override these properties in `gradle.properties`.
 
 The plugin also uses many of the [convention properties](http://gradle.org/docs/current/userguide/java_plugin.html#N11E90) from the Java plugin.
 
+Task: `deployDevelopmentAmp`
+-----------
+
+
+The `deployDevelopmentAmp` task copies the files in your AMP project directly into a specified exploded WAR
+for development purposes only.  The changes can not be revoked, and no file-mapping.properties directives are followed.
+
+The path to the exploded WAR is set in the `developmentExplodedWar` property and can be specified on the command line:
+
+	gradle deployDevelopmentAmp -PdevelopmentExplodedWar=/Path/To/Exploded/WAR
+
+
 ### Coming From Maven Archetypes
 
 If your project was created by the Alfresco Maven archetypes you can set `fromMavenArchetype`
