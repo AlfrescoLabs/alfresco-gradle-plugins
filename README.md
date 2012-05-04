@@ -63,7 +63,14 @@ The packed AMP will be available at `build/distributions/*moduleId*-*version*.am
 ### Project Layout
 
 The standard Gradle Java plugin [project layout](http://gradle.org/docs/current/userguide/java_plugin.html#N11D6B)
-is assumed and `project.name` is used as your AMP module id by default. You can override these properties in `gradle.properties`.
+is assumed with the addition of a source config dir, .i.e. `src/main/config`.
+
+It's important to note that files in your *resources* directory are placed into the compiled jar while
+files in the *config* directory are placed in the config dir of the AMP.
+
+`project.name` is used as your AMP module id by default.
+
+You can override these properties in `gradle.properties`.
 
 ### Properties
 

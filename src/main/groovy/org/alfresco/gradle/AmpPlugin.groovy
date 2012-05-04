@@ -115,9 +115,6 @@ class AmpPlugin implements Plugin<Project> {
 			from("${project.licensesDir}") {
 				into 'licenses'
 			}
-			into('config') {
-				from "${project.sourceSets.main.resources}"
-			}
 			into('web') {
 				from "${project.sourceWebDir}"
 			}
@@ -156,6 +153,34 @@ class AmpPlugin implements Plugin<Project> {
 		}
 //		project.tasks.amp.outputs.file project.file("${project.buildDir}/${project.distsDirName}/${project.name}-${project.version}.amp")
 		
+	    // TODO - Move this to MMT once it supports exploded WARs, file-mapping.properties is ignored
+		project.task('deployDevelopmentAmp', type: Copy, dependsOn: ['assembleAmp']) {
+			if (project.hasProperty('developmentExplodedWar')) {
+				into("${project.developmentExplodedWar}")
+				exclude '**/*README*'
+				from("${project.buildDir}/libs") {  // contains the result of the jar task
+					into 'WEB-INF/lib'
+				}
+				from("${project.dependencyLibsDir}") {
+					into 'WEB-INF/lib'
+				}
+				into('./') {
+					from "${project.sourceWebDir}"
+				}
+				into('WEB-INF/classes') {
+					from "${project.sourceConfigDir}"
+					exclude '**/module.properties'
+					exclude '**/module-context.xml'
+					exclude '**/file-mapping.properties'
+				}
+				into("WEB-INF/classes/alfresco/module/${project.moduleId}") {
+					from ("${project.sourceConfigModuleDir}") {
+						include 'module-context.xml'
+						expand(project.properties)
+					}
+				}
+			}
+		}
 	}
 	
 	boolean isFromMavenArchetype(Project project) {
