@@ -45,9 +45,9 @@ apply plugin: 'amp'
 
 
 
-Plugin: `amp`, Task: `amp`
---------------------------
-
+Task: `amp`
+-----------
+####Plugin: `amp`
 
 The `amp` task packages an Alfresco AMP for deployment via the Module Management Tool.
 
@@ -159,9 +159,9 @@ maintined and velocity template paramters will also be expanded within your
 Checkout the [amp-gradle-example](https://github.com/Alfresco/amp-gradle-example) project for an example on how to use the Gradle amp plugin.
 
 
-Plugin: `amp`, Task: `deployDevelopmentAmp`
--------------------------------------------
-
+Task: `deployDevelopmentAmp`
+----------------------------
+####Plugin: `amp`
 
 The `deployDevelopmentAmp` task copies the files in your AMP project directly into a specified exploded WAR
 for development purposes only.  The changes can not be revoked, and no file-mapping.properties directives are followed.
@@ -171,8 +171,9 @@ The path to the exploded WAR is set in the `developmentExplodedWar` property and
 	gradle deployDevelopmentAmp -PdevelopmentExplodedWar=/Path/To/Exploded/WAR
 
 
-Plugin: `alfresco-war-dependencies`, Task: `explodeWarDependencies`
--------------------------------------------------------------------
+Task: `explodeWarDependencies`
+------------------------------
+####Plugin: `alfresco-war-dependencies`
 
 The `explodeWarDependencies` task extracts the jars and configs from the WAR file specified in warFile
 to be used as dependencies in the project.  A `compile` dependency on all jars in `explodedLibsDir` is 
