@@ -9,9 +9,13 @@ apply plugin: 'maven'
 
 repositories {
     mavenCentral()
+	maven {
+		url "http://maven.alfresco.com/nexus/content/groups/public"
+	}
 }
 
 dependencies {
+	compile group: 'org.alfresco', name: 'alfresco-repository', version: '4.0.d'
     testCompile 'junit:junit:4.8.2'
 }
 

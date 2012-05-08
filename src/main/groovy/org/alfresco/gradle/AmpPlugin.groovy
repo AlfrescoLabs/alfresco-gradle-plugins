@@ -19,6 +19,7 @@ import org.gradle.api.Project
 import org.gradle.api.Plugin
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.StopExecutionException
+import org.gradle.api.tasks.TaskInstantiationException
 import org.gradle.api.tasks.bundling.Zip
 import org.apache.tools.ant.filters.ReplaceTokens
 
@@ -151,12 +152,30 @@ class AmpPlugin implements Plugin<Project> {
 			from "${project.buildDir}/amp"
 			extension = 'amp'
 		}
-//		project.tasks.amp.outputs.file project.file("${project.buildDir}/${project.distsDirName}/${project.name}-${project.version}.amp")
+		project.tasks.amp.outputs.file project.file("${project.buildDir}/${project.distsDirName}/${project.name}-${project.version}.amp")
 		
+		project.task('installAmp', dependsOn: ['amp'],
+			description: "Uses MMT to install the packaged AMP into the specified 'warFile'") << {
+			def warFileLocation = file("${warFile}")
+			def ampFileLocation = file("${project.buildDir}/${project.distsDirName}/${project.name}-${project.version}.amp")
+			
+			mmt = new org.alfresco.repo.module.tool.ModuleManagementTool()
+			mmt.setVerbose(true)
+			mmt.installModule(ampFileLocation.getPath(), warFileLocation.getPath(), false, true, false)
+		}
+		project.tasks.installAmp.doFirst {
+			if (!project.hasProperty('warFile')) {
+				throw new TaskInstantiationException(
+					"Project property 'warFile' must be set for installAmp task"
+				);
+			}
+		}
+				
 	    // TODO - Move this to MMT once it supports exploded WARs, file-mapping.properties is ignored
-		project.task('deployDevelopmentAmp', type: Copy, dependsOn: ['assembleAmp']) {
-			if (project.hasProperty('developmentExplodedWar')) {
-				into("${project.developmentExplodedWar}")
+		project.task('installDevelopmentAmp', type: Copy, dependsOn: ['assembleAmp'],
+			    description: "Installs the files that would be packged as an AMP directly into 'warExplodedDir'") {
+			if (project.hasProperty('warExplodedDir')) {
+				into("${project.warExplodedDir}")
 				exclude '**/*README*'
 				from("${project.buildDir}/libs") {  // contains the result of the jar task
 					into 'WEB-INF/lib'
@@ -181,6 +200,14 @@ class AmpPlugin implements Plugin<Project> {
 				}
 			}
 		}
+		// TODO Below runs regardless of task called
+//		project.tasks.installDevelopmentAmp.doFirst {
+//			if (!project.hasProperty('warExplodedDir')) {
+//				throw new TaskInstantiationException(
+//					"Project property 'warExplodedDir' must be set for installDevelopmentAmp task"
+//				);
+//			}
+//		}
 	}
 	
 	boolean isFromMavenArchetype(Project project) {

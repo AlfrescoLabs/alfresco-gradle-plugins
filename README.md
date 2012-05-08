@@ -159,16 +159,26 @@ maintined and velocity template paramters will also be expanded within your
 Checkout the [amp-gradle-example](https://github.com/Alfresco/amp-gradle-example) project for an example on how to use the Gradle amp plugin.
 
 
-Task: `deployDevelopmentAmp`
+Task: `installAmp`
 ----------------------------
 ####Plugin: `amp`
 
-The `deployDevelopmentAmp` task copies the files in your AMP project directly into a specified exploded WAR
+The `installAmp` task assembles and packages your AMP then uses Alfresco's MMT code to install it
+into the WAR set in the `warExplodedDir` property and can be specified on the command line:
+
+	gradle installAmp -PwarFile=/Path/To/WAR/File
+	
+
+Task: `installDevelopmentAmp`
+----------------------------
+####Plugin: `amp`
+
+The `installDevelopmentAmp` task copies the files in your AMP project directly into a specified exploded WAR
 for development purposes only.  The changes can not be revoked, and no file-mapping.properties directives are followed.
 
-The path to the exploded WAR is set in the `developmentExplodedWar` property and can be specified on the command line:
+The path to the exploded WAR is set in the `warExplodedDir` property and can be specified on the command line:
 
-	gradle deployDevelopmentAmp -PdevelopmentExplodedWar=/Path/To/Exploded/WAR
+	gradle installDevelopmentAmp -PwarExplodedDir=/Path/To/Exploded/WAR
 
 
 Task: `explodeWarDependencies`
@@ -176,7 +186,7 @@ Task: `explodeWarDependencies`
 ####Plugin: `alfresco-war-dependencies`
 
 The `explodeWarDependencies` task extracts the jars and configs from the WAR file specified in warFile
-to be used as dependencies in the project.  A `compile` dependency on all jars in `explodedLibsDir` is 
+to be used as dependencies in the project.  A `compile` dependency on all jars in `dependenciesExplodedLibsDir` is 
 also added to the project.
 
 ### Running the `explodeWarDependencies` Task
@@ -205,21 +215,21 @@ By default the task is looking for `alfresco.war` and the extracted files will b
 		<td>The path to the WAR file that should be used as a dependencies source</td>
 	</tr>
 	<tr>
-		<td><code>explodedDependenciesDir</code></td>
+		<td><code>dependenciesExplodedDir</code></td>
 		<td>String</td>
 		<td><code>explodedDependencies</code></td>
 		<td>The path to the directory where the extracted dependencies should be placed</td>
 	</tr>
 	<tr>
-		<td><code>explodedLibsDir</code></td>
+		<td><code>dependenciesExplodedLibsDir</code></td>
 		<td>String</td>
-		<td><code><em>explodedDependenciesDir</em>/lib</code></td>
+		<td><code><em>dependenciesExplodedDir</em>/lib</code></td>
 		<td>The path to the directory where the extracted jars should be placed</td>
 	</tr>
 	<tr>
-		<td><code>explodedConfigDir</code></td>
+		<td><code>dependenciesExplodedConfigDir</code></td>
 		<td>String</td>
-		<td><code><em>explodedDependenciesDir</em>/config</code></td>
+		<td><code><em>dependenciesExplodedDir</em>/config</code></td>
 		<td>The path to the directory where the extracted configuration files should be placed</td>
 	</tr>
 </table>

@@ -34,25 +34,25 @@ class DependenciesFromWarPlugin implements Plugin<Project> {
 		if (!project.hasProperty('warFile')) {
 			project.ext.warFile = 'alfresco.war'
 		}
-		if (!project.hasProperty('explodedDependenciesDir')) {
-			project.ext.explodedDependenciesDir = 'explodedDependencies'
+		if (!project.hasProperty('dependenciesExplodedDir')) {
+			project.ext.dependenciesExplodedDir = 'explodedDependencies'
 		}
-		if (!project.hasProperty('explodedLibsDir')) {
-			project.ext.explodedLibsDir = "${project.explodedDependenciesDir}/lib"
+		if (!project.hasProperty('dependenciesExplodedLibsDir')) {
+			project.ext.dependenciesExplodedLibsDir = "${project.dependenciesExplodedDir}/lib"
 		}
-		if (!project.hasProperty('explodedConfigDir')) {
-			project.ext.explodedConfigDir = "${project.explodedDependenciesDir}/config"
+		if (!project.hasProperty('dependenciesExplodedConfigDir')) {
+			project.ext.dependenciesExplodedConfigDir = "${project.dependenciesExplodedDir}/config"
 		}
 		
-		project.dependencies.add("compile", project.fileTree(dir: project.explodedLibsDir, include: '*.jar'))
+		project.dependencies.add("compile", project.fileTree(dir: project.dependenciesExplodedLibsDir, include: '*.jar'))
 		
 		// Extracts the jars and configs from the war
 		project.task('explodeWarDependencies',
 				group: 'Build',
 				description: 'Extracts the jars and configs from the WAR file specified in warFile.') << {
-			def explodedDir = project.file(project.explodedDependenciesDir)
-			def explodedLibDir = project.file(project.explodedLibsDir)
-			def explodedConfigDir = project.file(project.explodedConfigDir)
+			def explodedDir = project.file(project.dependenciesExplodedDir)
+			def explodedLibDir = project.file(project.dependenciesExplodedLibsDir)
+			def dependenciesExplodedConfigDir = project.file(project.dependenciesExplodedConfigDir)
 			def warFileObj = project.file(project.warFile)
 		
 			if (warFileObj.exists() == true) {
@@ -76,9 +76,9 @@ class DependenciesFromWarPlugin implements Plugin<Project> {
 					}
 				}
 				
-				if (isUnpacked(explodedConfigDir) == false) {
+				if (isUnpacked(dependenciesExplodedConfigDir) == false) {
 				
-					println(" ... unpacking config into ${explodedConfigDir}")
+					println(" ... unpacking config into ${dependenciesExplodedConfigDir}")
 					
 					ant.unzip(src: warFileObj, dest: explodedDir) {
 						ant.patternset {
@@ -88,7 +88,7 @@ class DependenciesFromWarPlugin implements Plugin<Project> {
 					
 					project.copy {
 						from "${explodedDir}/WEB-INF/classes"
-						into explodedConfigDir
+						into dependenciesExplodedConfigDir
 					}
 					
 					// TODO understand why this doesn't delete the folder as expected
@@ -104,7 +104,7 @@ class DependenciesFromWarPlugin implements Plugin<Project> {
 		}
 		
 		project.tasks.compileJava.dependsOn project.tasks.explodeWarDependencies
-		project.tasks.explodeWarDependencies.outputs.dir project.file("${project.explodedDependenciesDir}")
+		project.tasks.explodeWarDependencies.outputs.dir project.file("${project.dependenciesExplodedDir}")
 		
 	}
 	
