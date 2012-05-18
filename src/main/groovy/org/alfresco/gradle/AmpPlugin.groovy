@@ -70,7 +70,7 @@ class AmpPlugin implements Plugin<Project> {
 		// Add common dependencies
 		project.dependencies.add("compile", "org.alfresco:alfresco-repository:${project.alfrescoVersion}")
 		project.dependencies.add("compile", "org.alfresco:alfresco-core:${project.alfrescoVersion}")
-		project.dependencies.add("compile", "org.alfresco:alfresco-datamodel:${project.alfrescoVersion}")
+		project.dependencies.add("compile", "org.alfresco:alfresco-data-model:${project.alfrescoVersion}")
 		project.dependencies.add("compile", "org.springframework:spring-core:${project.springVersion}")
 		project.dependencies.add("compile", "org.springframework:spring-beans:${project.springVersion}")
 		project.dependencies.add("compile", "org.springframework:spring-context:${project.springVersion}")
