@@ -15,8 +15,12 @@
  */
 package org.alfresco.gradle
 
+import com.yahoo.platform.yui.compressor.CssCompressor
+import com.yahoo.platform.yui.compressor.JavaScriptCompressor
 import org.gradle.api.Project
 import org.gradle.api.Plugin
+import org.gradle.api.file.FileCollection
+import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.StopExecutionException
 import org.gradle.api.tasks.TaskInstantiationException
@@ -28,8 +32,19 @@ import org.apache.tools.ant.filters.ReplaceTokens
  * resources in a build directory then zips the file into a standard AMP.
  */
 class AmpPlugin implements Plugin<Project> {
+	
+	int lineBreak = -1
+	boolean munge
+	boolean verbose
+	boolean preserveAllSemiColons
+	boolean disableOptimizations
+	
+	final String CSS_FILE_EXTENSION = '.css';
+	final String JAVASCRIPT_FILE_EXTENSION = '.js';
+	
 	void apply(Project project) {
 		
+		// Set default properties if they're not set
 		if (!project.hasProperty('moduleId')) {
 			project.ext.moduleId = project.name
 		}
@@ -48,6 +63,19 @@ class AmpPlugin implements Plugin<Project> {
 		if (!project.hasProperty('licensesDir')) {
 			project.ext.licensesDir = 'licenses'
 		}
+		if (!project.hasProperty('springVersion')) {
+			project.ext.springVersion = '3.0.0.RELEASE'
+		}
+		
+		// Add common dependencies
+		project.dependencies.add("compile", "org.alfresco:alfresco-repository:${project.alfrescoVersion}")
+		project.dependencies.add("compile", "org.alfresco:alfresco-core:${project.alfrescoVersion}")
+		project.dependencies.add("compile", "org.alfresco:alfresco-datamodel:${project.alfrescoVersion}")
+		project.dependencies.add("compile", "org.springframework:spring-core:${project.springVersion}")
+		project.dependencies.add("compile", "org.springframework:spring-beans:${project.springVersion}")
+		project.dependencies.add("compile", "org.springframework:spring-context:${project.springVersion}")
+		project.dependencies.add("compile", project.fileTree(dir: 'lib', include: '**/*.jar'))
+		
 		
 		// Sets the project build number from the project's last changed SVN revision
 		project.task('setBuildNumberFromSvnRevision') << {
@@ -70,7 +98,7 @@ class AmpPlugin implements Plugin<Project> {
 		}
 		
 		// Sets the project build number from the project's last changed SVN revision
-		project.task('setupMavenProperties', dependsOn: 'setBuildNumberFromSvnRevision') << {
+		project.task('setupMavenProperties') << {
 			onlyIf {
 				isFromMavenArchetype(project)
 			}
@@ -104,7 +132,7 @@ class AmpPlugin implements Plugin<Project> {
 		}
 		
 		// Assembles the resources for an Alfresco AMP in the build dir.
-		project.task('assembleAmp', type: Copy, dependsOn: ['jar', 'assembleAmpFromMavenArchetype']) {
+		project.task('assembleAmp', type: Copy, dependsOn: ['jar', 'setBuildNumberFromSvnRevision', 'assembleAmpFromMavenArchetype']) {
 			into("${project.buildDir}/amp")
 			exclude '**/*README*'
 			from("${project.buildDir}/libs") {  // contains the result of the jar task
@@ -146,7 +174,30 @@ class AmpPlugin implements Plugin<Project> {
 		}
 		project.tasks.assembleAmp.outputs.dir project.file("${project.buildDir}/amp")
 		
-		project.task('amp', type: Zip, dependsOn: 'assembleAmp', 
+		project.task('compressAmp', dependsOn: 'assembleAmp',
+				group: 'Build',
+				description: 'Uses YUI Compressor to compress web resources within the assembled AMP.') << {
+			FileTree tree = project.fileTree(dir: "${project.buildDir}/amp")
+			tree.include '**/*.js'
+			tree.include '**/*.css'
+			tree.exclude '**/*-min.js'
+			tree.exclude '**/WEB-INF/**'
+			tree.exclude '**/tiny_mce/**'
+			tree.exclude '**/yui/**'
+			tree.exclude '**/site-webscripts/**'
+			
+			tree.each { File sourceFile ->
+				File targetFile = new File(generateDestinationFileName(sourceFile.getParent(), sourceFile))
+				logger.debug "compressing ${sourceFile.name}"
+				if (sourceFile.name.endsWith(JAVASCRIPT_FILE_EXTENSION))
+					compressJsFile(sourceFile, targetFile)
+				else if (sourceFile.name.endsWith(CSS_FILE_EXTENSION))
+					compressCssFile(sourceFile, targetFile)
+				logger.info "${sourceFile.name} with size ${sourceFile.size()} compressed to ${targetFile.name} with size ${targetFile.size()}"
+			}
+		}
+		
+		project.task('amp', type: Zip, dependsOn: 'compressAmp', 
 				group: 'Build', 
 				description: 'Packages an Alfresco AMP for deployment via the Module Management Tool.') {
 			from "${project.buildDir}/amp"
@@ -156,10 +207,10 @@ class AmpPlugin implements Plugin<Project> {
 		
 		project.task('installAmp', dependsOn: ['amp'],
 			description: "Uses MMT to install the packaged AMP into the specified 'warFile'") << {
-			def warFileLocation = file("${warFile}")
-			def ampFileLocation = file("${project.buildDir}/${project.distsDirName}/${project.name}-${project.version}.amp")
+			def warFileLocation = project.file("${project.warFile}")
+			def ampFileLocation = project.file("${project.buildDir}/${project.distsDirName}/${project.name}-${project.version}.amp")
 			
-			mmt = new org.alfresco.repo.module.tool.ModuleManagementTool()
+			def mmt = new org.alfresco.repo.module.tool.ModuleManagementTool()
 			mmt.setVerbose(true)
 			mmt.installModule(ampFileLocation.getPath(), warFileLocation.getPath(), false, true, false)
 		}
@@ -213,4 +264,37 @@ class AmpPlugin implements Plugin<Project> {
 	boolean isFromMavenArchetype(Project project) {
 		return (project.hasProperty('fromMavenArchetype') && project.fromMavenArchetype)
 	}
+	
+	
+	// Much of compressor code based on https://github.com/ecamacho/YUI-Compressor-Gradle-Plugin
+	
+	String generateDestinationFileName(String targetDir, File sourceFile) {
+		String fileNameWithoutExtension = sourceFile.name.lastIndexOf( '.' ).with {
+			it != -1 ? sourceFile.name[0..<it] : sourceFile.name
+		}
+		String fileExtension = sourceFile.name.lastIndexOf( '.' ).with {
+			it != -1 ? sourceFile.name[it..sourceFile.name.length() - 1] : ''
+		}
+		def fileName = "$targetDir/${fileNameWithoutExtension}-min${fileExtension}"
+		fileName
+	}
+	
+	void compressJsFile(File sourceFile, File targetFile) {
+		sourceFile.withReader{ reader ->
+			JavaScriptCompressor compressor = new JavaScriptCompressor(reader, null)
+			targetFile.withWriter{ writer ->
+				compressor.compress(writer, lineBreak, munge, verbose, preserveAllSemiColons, disableOptimizations)
+			}
+		}
+	}
+	
+	void compressCssFile(File sourceFile, File targetFile) {
+		sourceFile.withReader{ reader ->
+			CssCompressor compressor = new CssCompressor(reader)
+			targetFile.withWriter{ writer ->
+				compressor.compress(writer, lineBreak)
+			}
+		}
+	}
+	
 }

@@ -152,6 +152,10 @@ maintined and velocity template paramters will also be expanded within your
 		<td><code>assembleAmp</code></td>
 		<td>Does the work of assembling the AMP structure but does not zip into a deployable .amp file</td>
 	</tr>
+	<tr>
+		<td><code>compressAmp</code></td>
+		<td>Applies YUI compressor to JS and CSS files within the assembled AMP structure</td>
+	</tr>
 </table>
 
 ### Example Project

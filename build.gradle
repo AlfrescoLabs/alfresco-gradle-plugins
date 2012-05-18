@@ -1,3 +1,6 @@
+group = 'org.alfresco.gradle'
+version = '0.1.1'
+
 apply plugin: 'groovy'
 
 dependencies {
@@ -16,11 +19,17 @@ repositories {
 
 dependencies {
 	compile group: 'org.alfresco', name: 'alfresco-repository', version: '4.0.d'
+	compile group: 'com.yahoo.platform.yui', name: 'yuicompressor', version: '2.4.6'
     testCompile 'junit:junit:4.8.2'
+	
+// These only work when a pom.xml is published and loading alfresco-gradle-plugins via repo
+// See http://gradle.1045684.n5.nabble.com/Defining-buildscript-dependency-in-custom-plugin-td3620230.html
+	runtime group: 'org.alfresco', name: 'alfresco-repository', version: alfrescoVersion, transitive: true
+	runtime group: 'org.alfresco', name: 'alfresco-core', version: alfrescoVersion, transitive: true
+	runtime group: 'de.schlichtherle.truezip', name: 'truezip', version: '5.1.2', transitive: true
+	runtime group: 'org.springframework.extensions.surf', name: 'spring-surf-core', version: '1.0.0', transitive: true
+	runtime group: 'com.yahoo.platform.yui', name: 'yuicompressor', version: '2.4.6', transitive: true
 }
-
-group = 'org.alfresco.gradle'
-version = '1.0-SNAPSHOT'
 
 uploadArchives {
     repositories {
