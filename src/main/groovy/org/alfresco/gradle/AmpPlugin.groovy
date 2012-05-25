@@ -66,6 +66,12 @@ class AmpPlugin implements Plugin<Project> {
 		if (!project.hasProperty('springVersion')) {
 			project.ext.springVersion = '3.0.0.RELEASE'
 		}
+		if (!project.hasProperty('assembleAmpDir')) {
+			project.ext.assembleAmpDir = "${project.buildDir}/amp"
+		}
+		if (!project.hasProperty('ampFile')) {
+			project.ext.ampFile = "${project.buildDir}/${project.distsDirName}/${project.name}-${project.version}.amp"
+		}
 		
 		// Add common dependencies
 		project.dependencies.add("compile", "org.alfresco:alfresco-repository:${project.alfrescoVersion}")
@@ -112,7 +118,7 @@ class AmpPlugin implements Plugin<Project> {
 			onlyIf {
 				isFromMavenArchetype(project)
 			}
-			into("${project.buildDir}/amp")
+			into("${project.assembleAmpDir}")
 			exclude '**/*README*'
 			into('./') {
 				from('./') {
@@ -133,7 +139,7 @@ class AmpPlugin implements Plugin<Project> {
 		
 		// Assembles the resources for an Alfresco AMP in the build dir.
 		project.task('assembleAmp', type: Copy, dependsOn: ['jar', 'setBuildNumberFromSvnRevision', 'assembleAmpFromMavenArchetype']) {
-			into("${project.buildDir}/amp")
+			into("${project.assembleAmpDir}")
 			exclude '**/*README*'
 			from("${project.buildDir}/libs") {  // contains the result of the jar task
 				into 'lib'
@@ -172,12 +178,12 @@ class AmpPlugin implements Plugin<Project> {
 				}
 			}
 		}
-		project.tasks.assembleAmp.outputs.dir project.file("${project.buildDir}/amp")
+		project.tasks.assembleAmp.outputs.dir project.file("${project.assembleAmpDir}")
 		
 		project.task('compressAmp', dependsOn: 'assembleAmp',
 				group: 'Build',
 				description: 'Uses YUI Compressor to compress web resources within the assembled AMP.') << {
-			FileTree tree = project.fileTree(dir: "${project.buildDir}/amp")
+			FileTree tree = project.fileTree(dir: "${project.assembleAmpDir}")
 			tree.include '**/*.js'
 			tree.include '**/*.css'
 			tree.exclude '**/*-min.js'
@@ -200,15 +206,15 @@ class AmpPlugin implements Plugin<Project> {
 		project.task('amp', type: Zip, dependsOn: 'compressAmp', 
 				group: 'Build', 
 				description: 'Packages an Alfresco AMP for deployment via the Module Management Tool.') {
-			from "${project.buildDir}/amp"
+			from "${project.assembleAmpDir}"
 			extension = 'amp'
 		}
-		project.tasks.amp.outputs.file project.file("${project.buildDir}/${project.distsDirName}/${project.name}-${project.version}.amp")
+		project.tasks.amp.outputs.file project.file("${project.ampFile}")
 		
 		project.task('installAmp', dependsOn: ['amp'],
 			description: "Uses MMT to install the packaged AMP into the specified 'warFile'") << {
 			def warFileLocation = project.file("${project.warFile}")
-			def ampFileLocation = project.file("${project.buildDir}/${project.distsDirName}/${project.name}-${project.version}.amp")
+			def ampFileLocation = project.file("${project.ampFile}")
 			
 			def mmt = new org.alfresco.repo.module.tool.ModuleManagementTool()
 			mmt.setVerbose(true)
