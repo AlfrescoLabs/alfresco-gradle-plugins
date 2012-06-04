@@ -254,7 +254,7 @@ By default the task is looking for `alfresco.war` and the extracted files will b
 Other Tasks
 -----------
 
-### upload
+### `upload`
 
 You can upload the `alfresco-gradle-plugins` artifact to a maven repository by specifying:
 
