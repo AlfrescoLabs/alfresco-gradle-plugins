@@ -251,6 +251,23 @@ By default the task is looking for `alfresco.war` and the extracted files will b
 	</tr>
 </table>
 
+Other Tasks
+-----------
+
+### upload
+
+You can upload the `alfresco-gradle-plugins` artifact to a maven repository by specifying:
+
+- `mavenUploadRepository`
+- `mavenUsername`
+- `mavenPassword`
+
+as properties for your project and running the `upload` task.  Note that you'll probably not
+want to store your username and password in clear text so you can specify those via command
+line:
+
+	gradle clean upload -PmavenUsername=myUsername -PmavenPassword=myPassword
+
 
 License
 -------

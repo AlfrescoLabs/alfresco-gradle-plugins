@@ -1,3 +1,6 @@
+configurations {
+	deployerJars
+}
 
 apply plugin: 'groovy'
 
@@ -29,12 +32,24 @@ dependencies {
 	runtime group: 'de.schlichtherle.truezip', name: 'truezip', version: '5.1.2', transitive: true
 	runtime group: 'org.springframework.extensions.surf', name: 'spring-surf-core', version: '1.0.0', transitive: true
 	runtime group: 'com.yahoo.platform.yui', name: 'yuicompressor', version: '2.4.6', transitive: true
+	
+	deployerJars 'org.apache.maven.wagon:wagon-http:1.0-beta-2'
 }
 
+
+if (!hasProperty('mavenUsername'))
+	ext.mavenUsername = ''
+if (!hasProperty('mavenPassword'))
+	ext.mavenPassword = ''
+
 uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: uri(System.properties["user.home"] + '/.m2'))
-        }
-    }
+	repositories {
+		mavenDeployer {
+			//repository(url: uri(System.properties["user.home"] + '/.m2'))
+			configuration = configurations.deployerJars
+			repository(url: mavenUploadRepositoryUrl) {
+				authentication(userName: mavenUsername, password: mavenPassword)
+			}
+		}
+	}
 }
