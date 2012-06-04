@@ -268,6 +268,20 @@ line:
 
 	gradle clean upload -PmavenUsername=myUsername -PmavenPassword=myPassword
 
+### `uploadArchivesViaMvn`
+
+You can also upload the `alfresco-gradle-plugins` artifact to a maven repository using the maven command line
+by specifying:
+
+- `mavenUploadRepositoryId`
+- `mavenUploadRepository`
+
+as properties for your project and setting up your `mvn` repositories, 
+including [encrypted passwords](http://maven.apache.org/guides/mini/guide-encryption.html), 
+then run:
+
+	gradle clean uploadArchivesViaMvn
+
 
 License
 -------
