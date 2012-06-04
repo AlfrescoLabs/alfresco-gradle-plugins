@@ -53,3 +53,14 @@ uploadArchives {
 		}
 	}
 }
+
+task uploadArchivesViaMvn(type: Exec, group: 'upload', description: 'Uploads artifacts using maven command line. Requires mvn and encryption (http://maven.apache.org/guides/mini/guide-encryption.html).') {
+	//on linux:
+	def localArtifactPathPrefix = System.properties["user.home"] + '/.m2/repository/' + 
+		groupId.replaceAll('\\.', '/') + '/' + project.name + '/' + version + '/' +
+		project.name + '-' + version
+	
+	commandLine 'mvn', 'deploy:deploy-file', "-Durl=${mavenUploadRepositoryUrl}", "-DrepositoryId=${mavenUploadRepositoryId}",
+		"-Dfile=${localArtifactPathPrefix}.jar", "-DpomFile=${localArtifactPathPrefix}.pom"
+}
+
