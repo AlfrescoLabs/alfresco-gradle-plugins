@@ -6,6 +6,8 @@ dependencies {
     groovy localGroovy()
 }
 
+group = groupId
+
 apply plugin: 'maven'
 
 repositories {
