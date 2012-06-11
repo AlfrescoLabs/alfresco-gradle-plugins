@@ -221,6 +221,7 @@ class AmpPlugin implements Plugin<Project> {
 			mmt.installModule(ampFileLocation.getPath(), warFileLocation.getPath(), false, true, false)
 		}
 		project.tasks.installAmp.doFirst {
+			checkForWarFile(project)
 			if (!project.hasProperty('warFile')) {
 				throw new TaskInstantiationException(
 					"Project property 'warFile' must be set for installAmp task"
@@ -231,7 +232,9 @@ class AmpPlugin implements Plugin<Project> {
 	    // TODO - Move this to MMT once it supports exploded WARs, file-mapping.properties is ignored
 		project.task('installDevelopmentAmp', type: Copy, dependsOn: ['assembleAmp'],
 			    description: "Installs the files that would be packged as an AMP directly into 'warExplodedDir'") {
+			checkForWarExplodedDir(project)
 			if (project.hasProperty('warExplodedDir')) {
+				logger.lifecycle "Installing development AMP at: ${project.warExplodedDir}"
 				into("${project.warExplodedDir}")
 				exclude '**/*README*'
 				from("${project.buildDir}/libs") {  // contains the result of the jar task
@@ -259,6 +262,7 @@ class AmpPlugin implements Plugin<Project> {
 		}
 		// TODO Below runs regardless of task called
 //		project.tasks.installDevelopmentAmp.doFirst {
+//			checkForWarExplodedDir(project)
 //			if (!project.hasProperty('warExplodedDir')) {
 //				throw new TaskInstantiationException(
 //					"Project property 'warExplodedDir' must be set for installDevelopmentAmp task"
@@ -299,6 +303,30 @@ class AmpPlugin implements Plugin<Project> {
 			CssCompressor compressor = new CssCompressor(reader)
 			targetFile.withWriter{ writer ->
 				compressor.compress(writer, lineBreak)
+			}
+		}
+	}
+	
+	void checkForWarFile(Project project) {
+		if (!project.hasProperty('warFile') && System.getenv()['CURRENT_PROJECT'] != '') {
+			if (project.name.contains('repo')) {
+				project.ext.warFile = System.properties['user.home'] +
+					'/Development/projects/' + System.getenv()['CURRENT_PROJECT'] + '/software/tomcat/webapps/alfresco.war'
+			} else if (project.name.contains('share')) {
+				project.ext.warFile = System.properties['user.home'] +
+					'/Development/projects/' + System.getenv()['CURRENT_PROJECT'] + '/software/tomcat-app/webapps/share.war'
+			}
+		}
+	}
+	
+	void checkForWarExplodedDir(Project project) {
+		if (!project.hasProperty('warExplodedDir') && System.getenv()['CURRENT_PROJECT'] != '') {
+			if (project.name.contains('repo')) {
+				project.ext.warExplodedDir = System.properties['user.home'] +
+					'/Development/projects/' + System.getenv()['CURRENT_PROJECT'] + '/software/tomcat/webapps/alfresco'
+			} else if (project.name.contains('share')) {
+				project.ext.warExplodedDir = System.properties['user.home'] +
+					'/Development/projects/' + System.getenv()['CURRENT_PROJECT'] + '/software/tomcat-app/webapps/share'
 			}
 		}
 	}
