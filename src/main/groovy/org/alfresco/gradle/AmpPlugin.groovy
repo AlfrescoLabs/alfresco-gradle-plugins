@@ -81,6 +81,8 @@ class AmpPlugin implements Plugin<Project> {
 		project.dependencies.add("compile", "org.springframework:spring-beans:${project.springVersion}")
 		project.dependencies.add("compile", "org.springframework:spring-context:${project.springVersion}")
 		project.dependencies.add("compile", project.fileTree(dir: 'lib', include: '**/*.jar'))
+		project.configurations.add("amp")
+		project.configurations.amp.transitive = false
 		
 		
 		// Sets the project build number from the project's last changed SVN revision
@@ -141,6 +143,9 @@ class AmpPlugin implements Plugin<Project> {
 		project.task('assembleAmp', type: Copy, dependsOn: ['jar', 'setBuildNumberFromSvnRevision', 'assembleAmpFromMavenArchetype']) {
 			into("${project.assembleAmpDir}")
 			exclude '**/*README*'
+			from(project.configurations.amp) {
+				into 'lib'
+			}
 			from("${project.buildDir}/libs") {  // contains the result of the jar task
 				into 'lib'
 			}

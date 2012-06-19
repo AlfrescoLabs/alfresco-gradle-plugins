@@ -127,6 +127,18 @@ You can override these properties in `gradle.properties`.
 
 The plugin also uses many of the [convention properties](http://gradle.org/docs/current/userguide/java_plugin.html#N11E90) from the Java plugin.
 
+### Dependencies Management
+
+If your AMP needs to include jars which are specified via Maven dependencies
+you can simply add them to the 'amp' dependency configuration and the `amp`
+task will copy them to the final AMP archive, i.e.:
+
+```groovy
+dependencies {
+	amp group: 'com.example', name: 'some-artifact', version: '1.0-SNAPSHOT'
+}
+```
+
 ### Coming From Maven Archetypes
 
 If your project was created by the Alfresco Maven archetypes you can set `fromMavenArchetype`
