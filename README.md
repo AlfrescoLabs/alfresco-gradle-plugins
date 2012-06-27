@@ -27,7 +27,7 @@ buildscript {
 		mavenLocal()
 	}
 	dependencies {
-		classpath group: 'org.alfresco.gradle', name: 'amp-plugin', version: '1.0-SNAPSHOT'
+		classpath group: 'org.alfresco.gradle', name: 'amp-plugin', version: '0.1.6'
 	}
 }
 buildscript {
@@ -39,7 +39,7 @@ buildscript {
 then add each plugin you want to use:
 
 ```groovy
-apply plugin: 'alfresco-war-dependencies'
+apply plugin: 'alfresco-war-dependencies'   // optional
 apply plugin: 'amp'
 ```
 
@@ -65,7 +65,7 @@ The packed AMP will be available at `build/distributions/*moduleId*-*version*.am
 The standard Gradle Java plugin [project layout](http://gradle.org/docs/current/userguide/java_plugin.html#N11D6B)
 is assumed with the addition of a source config dir, .i.e. `src/main/config`.
 
-It's important to note that files in your *resources* directory are placed into the compiled jar while
+**Note** that files in your *resources* directory are placed into the compiled jar while
 files in the *config* directory are placed in the config dir of the AMP.
 
 `project.name` is used as your AMP module id by default.
@@ -86,6 +86,18 @@ You can override these properties in `gradle.properties`.
 		<td>String</td>
 		<td><code>project.name</code></td>
 		<td>The AMP module id</td>
+	</tr>
+	<tr>
+		<td><code>alfrescoVersion</code></td>
+		<td>String</td>
+		<td><code>4.0.d</code></td>
+		<td>The version of Alfresco to use for dependencies</td>
+	</tr>
+	<tr>
+		<td><code>alfrescoEdition</code></td>
+		<td>String</td>
+		<td><code>community</code></td>
+		<td>The edition of Alfresco to use for dependencies, community or enterprise</td>
 	</tr>
 	<tr>
 		<td><code>sourceConfigDir</code></td>

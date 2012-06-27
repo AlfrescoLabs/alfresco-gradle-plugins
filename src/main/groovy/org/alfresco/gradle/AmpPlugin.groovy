@@ -66,6 +66,12 @@ class AmpPlugin implements Plugin<Project> {
 		if (!project.hasProperty('springVersion')) {
 			project.ext.springVersion = '3.0.0.RELEASE'
 		}
+		if (!project.hasProperty('alfrescoVersion')) {
+			project.ext.alfrescoVersion = '4.0.d'
+		}
+        if (!project.hasProperty('alfrescoEdition')) {
+            project.ext.alfrescoEdition = "community"
+        }
 		if (!project.hasProperty('assembleAmpDir')) {
 			project.ext.assembleAmpDir = "${project.buildDir}/amp"
 		}
@@ -74,9 +80,15 @@ class AmpPlugin implements Plugin<Project> {
 		}
 		
 		// Add common dependencies
-		project.dependencies.add("compile", "org.alfresco:alfresco-repository:${project.alfrescoVersion}")
-		project.dependencies.add("compile", "org.alfresco:alfresco-core:${project.alfrescoVersion}")
-		project.dependencies.add("compile", "org.alfresco:alfresco-data-model:${project.alfrescoVersion}")
+        if (project.alfrescoEdition == "enterprise") {
+            project.dependencies.add("compile", "org.alfresco.enterprise:alfresco-repository:${project.alfrescoVersion}")
+            project.dependencies.add("compile", "org.alfresco.enterprise:alfresco-core:${project.alfrescoVersion}")
+            project.dependencies.add("compile", "org.alfresco.enterprise:alfresco-data-model:${project.alfrescoVersion}")
+        } else {
+            project.dependencies.add("compile", "org.alfresco:alfresco-repository:${project.alfrescoVersion}")
+            project.dependencies.add("compile", "org.alfresco:alfresco-core:${project.alfrescoVersion}")
+            project.dependencies.add("compile", "org.alfresco:alfresco-data-model:${project.alfrescoVersion}")
+        }
 		project.dependencies.add("compile", "org.springframework:spring-core:${project.springVersion}")
 		project.dependencies.add("compile", "org.springframework:spring-beans:${project.springVersion}")
 		project.dependencies.add("compile", "org.springframework:spring-context:${project.springVersion}")
@@ -162,14 +174,7 @@ class AmpPlugin implements Plugin<Project> {
 				into('config') {
 					from "${project.sourceConfigDir}"
 					exclude '**/module.properties'
-					exclude '**/module-context.xml'
 					exclude '**/file-mapping.properties'
-				}
-				into("config/alfresco/module/${project.moduleId}") {
-					from ("${project.sourceConfigModuleDir}") {
-						include 'module-context.xml'
-						expand(project.properties)
-					}
 				}
 				into('./') {
 					from ("${project.sourceConfigModuleDir}") {
@@ -254,12 +259,11 @@ class AmpPlugin implements Plugin<Project> {
 				into('WEB-INF/classes') {
 					from "${project.sourceConfigDir}"
 					exclude '**/module.properties'
-					exclude '**/module-context.xml'
 					exclude '**/file-mapping.properties'
 				}
 				into("WEB-INF/classes/alfresco/module/${project.moduleId}") {
 					from ("${project.sourceConfigModuleDir}") {
-						include 'module-context.xml'
+						include 'module-properties.xml'
 						expand(project.properties)
 					}
 				}
