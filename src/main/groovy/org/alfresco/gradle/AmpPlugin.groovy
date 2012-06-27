@@ -244,7 +244,6 @@ class AmpPlugin implements Plugin<Project> {
 			    description: "Installs the files that would be packged as an AMP directly into 'warExplodedDir'") {
 			checkForWarExplodedDir(project)
 			if (project.hasProperty('warExplodedDir')) {
-				logger.lifecycle "Installing development AMP at: ${project.warExplodedDir}"
 				into("${project.warExplodedDir}")
 				exclude '**/*README*'
 				from("${project.buildDir}/libs") {  // contains the result of the jar task
