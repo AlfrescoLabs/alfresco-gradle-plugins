@@ -93,8 +93,14 @@ class AmpPlugin implements Plugin<Project> {
 		project.dependencies.add("compile", "org.springframework:spring-beans:${project.springVersion}")
 		project.dependencies.add("compile", "org.springframework:spring-context:${project.springVersion}")
 		project.dependencies.add("compile", project.fileTree(dir: 'lib', include: '**/*.jar'))
-		project.configurations.add("amp")
-		project.configurations.amp.transitive = false
+		project.configurations.add("ampLib")
+		project.configurations.ampLib.transitive = false
+        project.configurations.add("ampConfig")
+        project.dependencies.add("ampConfig", project.files("${project.sourceConfigDir}"))
+        project.configurations.add("ampConfigModule")
+        project.dependencies.add("ampConfigModule", project.files("${project.sourceConfigModuleDir}"))
+        project.configurations.add("ampWeb")
+        project.dependencies.add("ampWeb", project.files("${project.sourceWebDir}"))
 		
 		
 		// Sets the project build number from the project's last changed SVN revision
@@ -155,7 +161,7 @@ class AmpPlugin implements Plugin<Project> {
 		project.task('assembleAmp', type: Copy, dependsOn: ['jar', 'setBuildNumberFromSvnRevision', 'assembleAmpFromMavenArchetype']) {
 			into("${project.assembleAmpDir}")
 			exclude '**/*README*'
-			from(project.configurations.amp) {
+			from(project.configurations.ampLib) {
 				into 'lib'
 			}
 			from("${project.buildDir}/libs") {  // contains the result of the jar task
@@ -168,20 +174,20 @@ class AmpPlugin implements Plugin<Project> {
 				into 'licenses'
 			}
 			into('web') {
-				from "${project.sourceWebDir}"
+				from project.configurations.ampWeb
 			}
 			if (!isFromMavenArchetype(project)) {
 				into('config') {
-					from "${project.sourceConfigDir}"
+					from project.configurations.ampConfig
 					exclude '**/module.properties'
 					exclude '**/file-mapping.properties'
 				}
 				into('./') {
-					from ("${project.sourceConfigModuleDir}") {
+					from project.configurations.ampConfigModule {
 						include 'module.properties'
 						expand(project.properties)
 					}
-					from ("${project.sourceConfigModuleDir}") {
+					from project.configurations.ampConfigModule {
 						include 'file-mapping.properties'
 						expand(project.properties)
 					}
