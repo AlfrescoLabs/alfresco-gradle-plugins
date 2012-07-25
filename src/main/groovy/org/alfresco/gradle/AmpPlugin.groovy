@@ -93,6 +93,7 @@ class AmpPlugin implements Plugin<Project> {
 		project.dependencies.add("compile", "org.springframework:spring-beans:${project.springVersion}")
 		project.dependencies.add("compile", "org.springframework:spring-context:${project.springVersion}")
 		project.dependencies.add("compile", project.fileTree(dir: 'lib', include: '**/*.jar'))
+		project.dependencies.add("testCompile", "junit:junit:4.+")
 		project.configurations.add("ampLib")
 		project.configurations.ampLib.transitive = false
         project.configurations.add("ampConfig")
