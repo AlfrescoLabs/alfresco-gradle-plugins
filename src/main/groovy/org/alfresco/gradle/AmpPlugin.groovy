@@ -80,7 +80,7 @@ class AmpPlugin implements Plugin<Project> {
 		}
 		
 		// Add common dependencies
-        if (project.alfrescoEdition == "enterprise") {
+        if (project.alfrescoEdition == 'enterprise') {
             project.dependencies.add("compile", "org.alfresco.enterprise:alfresco-repository:${project.alfrescoVersion}")
             project.dependencies.add("compile", "org.alfresco.enterprise:alfresco-core:${project.alfrescoVersion}")
             project.dependencies.add("compile", "org.alfresco.enterprise:alfresco-data-model:${project.alfrescoVersion}")
@@ -114,8 +114,12 @@ class AmpPlugin implements Plugin<Project> {
 				}
 				if (result.getExitValue()==0) {
 					def outputAsString = os.toString()
-					def matchLastChangedRev = outputAsString =~ /Last Changed Rev: (\d+)/
-					project.ext.buildNumber = matchLastChangedRev[0][1]
+                    if (outputAsString.contains('Last Changed Rev')) {
+                        def matchLastChangedRev = outputAsString =~ /Last Changed Rev: (\d+)/
+                        project.ext.buildNumber = matchLastChangedRev[0][1]
+                    } else {
+                        project.ext.buildNumber = '0'
+                    }
 				} else {
 					project.ext.buildNumber = '0'
 				}
