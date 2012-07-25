@@ -23,23 +23,23 @@ To build this plugins project and install in your local maven repo run:
 2. Add the `alfresco-gradle-plugins` jar to `lib-compile`
 3. In the `build.gradle` file of your project add:
 
-```groovy
-buildscript {
-	dependencies {
-		classpath fileTree(dir: 'lib-compile', include: '**/*.jar')
+	```groovy
+	buildscript {
+		dependencies {
+			classpath fileTree(dir: 'lib-compile', include: '**/*.jar')
+		}
 	}
-}
-buildscript {
-   configurations.classpath.resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
-```
+	buildscript {
+	   configurations.classpath.resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+	}
+	```
 
 4. Add each plugin you want to use:
 
-```groovy
-// apply plugin: 'alfresco-war-dependencies'   // optional
-apply plugin: 'amp'
-```
+	```groovy
+	// apply plugin: 'alfresco-war-dependencies'   // optional
+	apply plugin: 'amp'
+	```
 
 
 
@@ -141,14 +141,14 @@ The plugin also uses many of the [convention properties](http://gradle.org/docs/
 
 The amp plugin automatically adds the follow dependencies to your project:
 
-	* "compile", "org.alfresco:alfresco-repository:${project.alfrescoVersion}"
-	* "compile", "org.alfresco:alfresco-core:${project.alfrescoVersion}"
-	* "compile", "org.alfresco:alfresco-data-model:${project.alfrescoVersion}"
-	* "compile", "org.springframework:spring-core:${project.springVersion}"
-	* "compile", "org.springframework:spring-beans:${project.springVersion}"
-	* "compile", "org.springframework:spring-context:${project.springVersion}"
-	* "compile", project.fileTree(dir: 'lib', include: '**/*.jar')
-	* "testCompile", "junit:junit:4.+"
+* "compile", "org.alfresco:alfresco-repository:${project.alfrescoVersion}"
+* "compile", "org.alfresco:alfresco-core:${project.alfrescoVersion}"
+* "compile", "org.alfresco:alfresco-data-model:${project.alfrescoVersion}"
+* "compile", "org.springframework:spring-core:${project.springVersion}"
+* "compile", "org.springframework:spring-beans:${project.springVersion}"
+* "compile", "org.springframework:spring-context:${project.springVersion}"
+* "compile", project.fileTree(dir: 'lib', include: '**/*.jar')
+* "testCompile", "junit:junit:4.+"
 
 If your project needs additional dependencies for compiling or testing add them
 in a dependencies block under subprojects in build.gradle.
