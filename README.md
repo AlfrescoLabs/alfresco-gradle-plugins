@@ -56,9 +56,9 @@ To compile and package run the following from your AMP project:
 	cd *my-amp-project*
 	gradle amp
 	
-The packed AMP will be available at `build/distributions/*moduleId*-*version*.amp` by default.
+The packed AMP will be available at `build/distributions/*moduleId*-*version*.amp` of each subproject by default.
 
-### Project Layout
+### Subprojects Layout
 
 The standard Gradle Java plugin [project layout](http://gradle.org/docs/current/userguide/java_plugin.html#N11D6B)
 is assumed with the addition of a source config dir, .i.e. `src/main/config`.
@@ -195,13 +195,14 @@ maintined and velocity template paramters will also be expanded within your
 	</tr>
 </table>
 
-### Example Project
 
+Example Project
+---------------
 Checkout the [amp-gradle-example](https://github.com/Alfresco/amp-gradle-example) project for an example on how to use the Gradle amp plugin.
 
 
 Task: `installAmp`
-----------------------------
+------------------
 ####Plugin: `amp`
 
 The `installAmp` task assembles and packages your AMP then uses Alfresco's MMT code to install it
@@ -222,15 +223,47 @@ The path to the exploded WAR is set in the `warExplodedDir` property and can be 
 	gradle installDevelopmentAmp -PwarExplodedDir=/Path/To/Exploded/WAR
 
 
-Task: `explodeWarDependencies`
-------------------------------
-####Plugin: `alfresco-war-dependencies`
+Other Tasks
+-----------
+
+####`upload`
+###Plugin: `amp`
+
+You can upload the `alfresco-gradle-plugins` artifact to a maven repository by specifying:
+
+- `mavenUploadRepository`
+- `mavenUsername`
+- `mavenPassword`
+
+as properties for your project and running the `upload` task.  Note that you'll probably not
+want to store your username and password in clear text so you can specify those via command
+line:
+
+	gradle clean upload -PmavenUsername=myUsername -PmavenPassword=myPassword
+
+####`uploadArchivesViaMvn`
+###Plugin: `amp`
+
+You can also upload the `alfresco-gradle-plugins` artifact to a maven repository using the maven command line
+by specifying:
+
+- `mavenUploadRepositoryId`
+- `mavenUploadRepository`
+
+as properties for your project and setting up your `mvn` repositories, 
+including [encrypted passwords](http://maven.apache.org/guides/mini/guide-encryption.html), 
+then run:
+
+	gradle clean uploadArchivesViaMvn
+
+####`explodeWarDependencies`
+###Plugin: `alfresco-war-dependencies`
 
 The `explodeWarDependencies` task extracts the jars and configs from the WAR file specified in warFile
 to be used as dependencies in the project.  A `compile` dependency on all jars in `dependenciesExplodedLibsDir` is 
 also added to the project.
 
-### Running the `explodeWarDependencies` Task
+## Running the `explodeWarDependencies` Task
 
 To extract the configs and jars from `warFile` place the WAR in the root of your project and run the following:
 
@@ -240,7 +273,7 @@ To extract the configs and jars from `warFile` place the WAR in the root of your
 By default the task is looking for `alfresco.war` and the extracted files will be available at 
 `explodedDependencies`.  You can override these defaults in `gradle.properties`.
 		
-### Properties
+## Properties
 
 <table>
 	<tr>
@@ -275,7 +308,7 @@ By default the task is looking for `alfresco.war` and the extracted files will b
 	</tr>
 </table>
 
-### Related Tasks
+## Related Tasks
 
 <table>
 	<tr>
@@ -287,37 +320,6 @@ By default the task is looking for `alfresco.war` and the extracted files will b
 		<td>Deletes the jars and configs extracted from the WAR file</td>
 	</tr>
 </table>
-
-Other Tasks
------------
-
-### `upload`
-
-You can upload the `alfresco-gradle-plugins` artifact to a maven repository by specifying:
-
-- `mavenUploadRepository`
-- `mavenUsername`
-- `mavenPassword`
-
-as properties for your project and running the `upload` task.  Note that you'll probably not
-want to store your username and password in clear text so you can specify those via command
-line:
-
-	gradle clean upload -PmavenUsername=myUsername -PmavenPassword=myPassword
-
-### `uploadArchivesViaMvn`
-
-You can also upload the `alfresco-gradle-plugins` artifact to a maven repository using the maven command line
-by specifying:
-
-- `mavenUploadRepositoryId`
-- `mavenUploadRepository`
-
-as properties for your project and setting up your `mvn` repositories, 
-including [encrypted passwords](http://maven.apache.org/guides/mini/guide-encryption.html), 
-then run:
-
-	gradle clean uploadArchivesViaMvn
 
 
 License
