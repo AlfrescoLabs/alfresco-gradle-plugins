@@ -45,9 +45,8 @@ To build this plugins project and install in your local maven repo run:
 
 Task: `amp`
 -----------
-####Plugin: `amp`
 
-The `amp` task packages an Alfresco AMP for deployment via the Module Management Tool.
+The `amp` task (available in the `amp` plugin) packages an Alfresco AMP for deployment via the Module Management Tool.
 
 ### Running the `amp` Task
 
@@ -60,7 +59,7 @@ The packed AMP will be available at `build/distributions/*moduleId*-*version*.am
 
 ### Subprojects Layout
 
-The standard Gradle Java plugin [project layout](http://gradle.org/docs/current/userguide/java_plugin.html#N11D6B)
+For each subproject the standard Gradle Java plugin [project layout](http://gradle.org/docs/current/userguide/java_plugin.html#N11D6B)
 is assumed with the addition of a source config dir, .i.e. `src/main/config`.
 
 **Note** that files in your *resources* directory are placed into the compiled jar while
@@ -196,16 +195,10 @@ maintined and velocity template paramters will also be expanded within your
 </table>
 
 
-Example Project
----------------
-Checkout the [amp-gradle-example](https://github.com/Alfresco/amp-gradle-example) project for an example on how to use the Gradle amp plugin.
-
-
 Task: `installAmp`
 ------------------
-####Plugin: `amp`
 
-The `installAmp` task assembles and packages your AMP then uses Alfresco's MMT code to install it
+The `installAmp` task (available in the `amp` plugin) assembles and packages your AMP then uses Alfresco's MMT code to install it
 into the WAR set in the `warExplodedDir` property and can be specified on the command line:
 
 	gradle installAmp -PwarFile=/Path/To/WAR/File
@@ -213,21 +206,24 @@ into the WAR set in the `warExplodedDir` property and can be specified on the co
 
 Task: `installDevelopmentAmp`
 ----------------------------
-####Plugin: `amp`
 
-The `installDevelopmentAmp` task copies the files in your AMP project directly into a specified exploded WAR
+The `installDevelopmentAmp` task (available in the `amp` plugin) copies the files in your AMP project directly into a specified exploded WAR
 for development purposes only.  The changes can not be revoked, and no file-mapping.properties directives are followed.
 
 The path to the exploded WAR is set in the `warExplodedDir` property and can be specified on the command line:
 
 	gradle installDevelopmentAmp -PwarExplodedDir=/Path/To/Exploded/WAR
+	
+
+Example Project
+---------------
+Checkout the [amp-gradle-example](https://github.com/Alfresco/amp-gradle-example) project for an example on how to use the Gradle amp plugin.
 
 
 Other Tasks
 -----------
 
-####`upload`
-###Plugin: `amp`
+### `upload`
 
 You can upload the `alfresco-gradle-plugins` artifact to a maven repository by specifying:
 
@@ -235,14 +231,13 @@ You can upload the `alfresco-gradle-plugins` artifact to a maven repository by s
 - `mavenUsername`
 - `mavenPassword`
 
-as properties for your project and running the `upload` task.  Note that you'll probably not
+as properties for your project and running the `upload` task (available in the `amp` plugin).  Note that you'll probably not
 want to store your username and password in clear text so you can specify those via command
 line:
 
 	gradle clean upload -PmavenUsername=myUsername -PmavenPassword=myPassword
 
-####`uploadArchivesViaMvn`
-###Plugin: `amp`
+### `uploadArchivesViaMvn`
 
 You can also upload the `alfresco-gradle-plugins` artifact to a maven repository using the maven command line
 by specifying:
@@ -255,15 +250,16 @@ including [encrypted passwords](http://maven.apache.org/guides/mini/guide-encryp
 then run:
 
 	gradle clean uploadArchivesViaMvn
+	
+(available in the `amp` plugin)
 
-####`explodeWarDependencies`
-###Plugin: `alfresco-war-dependencies`
+### `explodeWarDependencies`
 
-The `explodeWarDependencies` task extracts the jars and configs from the WAR file specified in warFile
-to be used as dependencies in the project.  A `compile` dependency on all jars in `dependenciesExplodedLibsDir` is 
-also added to the project.
+The `explodeWarDependencies` task (available in the `alfresco-war-dependencies` plugin) extracts the 
+jars and configs from the WAR file specified in warFile to be used as dependencies in the project.  
+A `compile` dependency on all jars in `dependenciesExplodedLibsDir` is also added to the project.
 
-## Running the `explodeWarDependencies` Task
+**Running the `explodeWarDependencies` Task**
 
 To extract the configs and jars from `warFile` place the WAR in the root of your project and run the following:
 
@@ -273,7 +269,7 @@ To extract the configs and jars from `warFile` place the WAR in the root of your
 By default the task is looking for `alfresco.war` and the extracted files will be available at 
 `explodedDependencies`.  You can override these defaults in `gradle.properties`.
 		
-## Properties
+**Properties**
 
 <table>
 	<tr>
@@ -308,7 +304,7 @@ By default the task is looking for `alfresco.war` and the extracted files will b
 	</tr>
 </table>
 
-## Related Tasks
+**Related Tasks**
 
 <table>
 	<tr>
