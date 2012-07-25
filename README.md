@@ -162,6 +162,27 @@ dependencies {
 }
 ```
 
+### Overlaying AMP Config and Web Sources
+
+There may be instances where you want a core set of functionality in your
+share and repo AMPs but want to override or extend portions of the config or
+web directories for certain deployments.
+
+In this case you can overlay another source set by adding to the `ampConfig`, `ampConfigModule`,
+and `ampWeb` configurations.  For example, in addition to `src/main/config/` you might have
+`src/client1/config` and `src/client2/config`, so in your `build.gradle` file you might have something like:
+
+```groovy
+if (project.hasProperty('overrideSource')) {
+	dependencies.add('ampConfig',  files("src/${project.overrideSource}/config"))
+	dependencies.add('ampConfigModule', files("src/${project.overrideSource}/config/alfresco/module/${moduleId}"))
+	dependencies.add('ampWeb', files("src/${project.overrideSource}/web"))
+}
+```
+
+then when to create the AMPs specific to client1 you'd run:
+
+	gradle amp -PoverrideSource=client1
 
 ### Coming From Maven Archetypes
 
@@ -202,7 +223,8 @@ The `installAmp` task (available in the `amp` plugin) assembles and packages you
 into the WAR set in the `warExplodedDir` property and can be specified on the command line:
 
 	gradle installAmp -PwarFile=/Path/To/WAR/File
-	
+
+Note that this should be run from subprojects or both share and repo AMPs will be applied to the specified warFile.
 
 Task: `installDevelopmentAmp`
 ----------------------------
@@ -214,10 +236,11 @@ The path to the exploded WAR is set in the `warExplodedDir` property and can be 
 
 	gradle installDevelopmentAmp -PwarExplodedDir=/Path/To/Exploded/WAR
 	
+Note that this should be run from subprojects or both share and repo AMP structure will be applied to the specified warExplodedDir.
 
 Example Project
 ---------------
-Checkout the [amp-gradle-example](https://github.com/Alfresco/amp-gradle-example) project for an example on how to use the Gradle amp plugin.
+Checkout the [alfresco-gradle-amp-example](https://github.com/AlfrescoLabs/alfresco-gradle-amp-example) project for an example on how to use the Gradle amp plugin.
 
 
 Other Tasks
