@@ -9,7 +9,7 @@ and packaging extensions to Alfresco, particularly those deployed as
 
 The project currently requires that Gradle and [Maven](http://maven.apache.org) be installed.
 
-### Installing this Project
+### Building this Project
 
 To build this plugins project and install in your local maven repo run:
 
@@ -19,15 +19,14 @@ To build this plugins project and install in your local maven repo run:
 
 ### Adding the Plugins to Your Project
 
-In the `build.gradle` file of your project add:
+1. Create a `lib-compile` directory in your project
+2. Add the `alfresco-gradle-plugins` jar to `lib-compile`
+3. In the `build.gradle` file of your project add:
 
 ```groovy
 buildscript {
-	repositories {
-		mavenLocal()
-	}
 	dependencies {
-		classpath group: 'org.alfresco.gradle', name: 'amp-plugin', version: '0.1.6'
+		classpath fileTree(dir: 'lib-compile', include: '**/*.jar')
 	}
 }
 buildscript {
@@ -35,8 +34,7 @@ buildscript {
 }
 ```
 
-
-then add each plugin you want to use:
+4. Add each plugin you want to use:
 
 ```groovy
 apply plugin: 'alfresco-war-dependencies'   // optional
