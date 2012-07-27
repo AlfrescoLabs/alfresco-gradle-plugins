@@ -41,6 +41,8 @@ To build this plugins project and install in your local maven repo run:
 	apply plugin: 'amp'
 	```
 
+You could instead checkout the alfresco-gradle-plugins source and run `gradle install` to build and install
+in your local Maven repository then declare a dependency on that artifact.
 
 
 Task: `amp`
