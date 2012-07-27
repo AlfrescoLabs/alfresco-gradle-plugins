@@ -222,7 +222,7 @@ Task: `installAmp`
 ------------------
 
 The `installAmp` task (available in the `amp` plugin) assembles and packages your AMP then uses Alfresco's MMT code to install it
-into the WAR set in the `warExplodedDir` property and can be specified on the command line:
+into the WAR set in the `warFile` property and can be specified on the command line:
 
 	gradle installAmp -PwarFile=/Path/To/WAR/File
 
