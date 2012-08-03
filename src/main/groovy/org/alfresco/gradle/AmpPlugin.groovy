@@ -257,17 +257,14 @@ class AmpPlugin implements Plugin<Project> {
 			if (project.hasProperty('warExplodedDir')) {
 				into("${project.warExplodedDir}")
 				exclude '**/*README*'
-				from("${project.buildDir}/libs") {  // contains the result of the jar task
-					into 'WEB-INF/lib'
-				}
-				from("${project.dependencyLibsDir}") {
+				from("${project.assembleAmpDir}/lib") {  // contains the result of the jar task
 					into 'WEB-INF/lib'
 				}
 				into('./') {
-					from "${project.sourceWebDir}"
+					from "${project.assembleAmpDir}/web"
 				}
 				into('WEB-INF/classes') {
-					from "${project.sourceConfigDir}"
+					from "${project.assembleAmpDir}/config"
 					exclude '**/module.properties'
 					exclude '**/file-mapping.properties'
 				}
