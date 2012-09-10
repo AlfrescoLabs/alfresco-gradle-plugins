@@ -106,33 +106,32 @@ class AmpPlugin implements Plugin<Project> {
 		
 		// Sets the project build number from the project's last changed SVN revision
 		project.task('setBuildNumberFromSvnRevision') << {
-			new ByteArrayOutputStream().withStream { os ->
-				def result = project.exec {
-					executable = 'svn'
-					args = ['info']
-					standardOutput = os
-					ignoreExitValue = true
+			if (!project.hasProperty('buildNumber')) {
+				new ByteArrayOutputStream().withStream { os ->
+					def result = project.exec {
+						executable = 'svn'
+						args = ['info']
+						standardOutput = os
+						ignoreExitValue = true
+					}
+					if (result.getExitValue()==0) {
+						def outputAsString = os.toString()
+	                    if (outputAsString.contains('Last Changed Rev')) {
+	                        def matchLastChangedRev = outputAsString =~ /Last Changed Rev: (\d+)/
+	                        project.ext.buildNumber = matchLastChangedRev[0][1]
+	                    } else {
+	                        project.ext.buildNumber = '0'
+	                    }
+					} else {
+						project.ext.buildNumber = '0'
+					}
 				}
-				if (result.getExitValue()==0) {
-					def outputAsString = os.toString()
-                    if (outputAsString.contains('Last Changed Rev')) {
-                        def matchLastChangedRev = outputAsString =~ /Last Changed Rev: (\d+)/
-                        project.ext.buildNumber = matchLastChangedRev[0][1]
-                    } else {
-                        project.ext.buildNumber = '0'
-                    }
-				} else {
-					project.ext.buildNumber = '0'
-				}
+				logger.lifecycle "Set buildNumber from SVN revision: ${project.buildNumber}"
 			}
-			logger.lifecycle "Set buildNumber from SVN revision: ${project.buildNumber}"
 		}
 		
-		// Sets the project build number from the project's last changed SVN revision
+		// Sets up aliases for maven named properties
 		project.task('setupMavenProperties') << {
-			onlyIf {
-				isFromMavenArchetype(project)
-			}
 			project.ext.artifactId = project.name
 			project.ext.noSnapshotVersion = project.version
 		}
@@ -188,11 +187,11 @@ class AmpPlugin implements Plugin<Project> {
 					exclude '**/file-mapping.properties'
 				}
 				into('./') {
-					from project.configurations.ampConfigModule {
+					from project.configurations.ampConfig {
 						include 'module.properties'
 						expand(project.properties)
 					}
-					from project.configurations.ampConfigModule {
+					from project.configurations.ampConfig {
 						include 'file-mapping.properties'
 						expand(project.properties)
 					}
