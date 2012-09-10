@@ -55,7 +55,7 @@ class AmpPlugin implements Plugin<Project> {
 			project.ext.sourceConfigModuleDir = "${project.sourceConfigDir}/alfresco/module/${project.moduleId}"
 		}
 		if (!project.hasProperty('sourceWebDir')) {
-			project.ext.sourceWebDir = 'src/main/web'
+			project.ext.sourceWebDir = 'src/main/webapp'
 		}
 		if (!project.hasProperty('dependencyLibsDir')) {
 			project.ext.dependencyLibsDir = 'lib'
