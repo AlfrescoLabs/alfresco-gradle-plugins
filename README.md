@@ -155,14 +155,15 @@ If your project needs additional dependencies for compiling or testing add them
 in a dependencies block under subprojects in build.gradle.
 
 If your AMP needs to include jars which are specified via Maven dependencies
-you can simply add them to the 'amp' dependency configuration and the `amp`
+you can simply add them to the 'ampLib' dependency configuration and the `amp`
 task will copy them to the final AMP archive, i.e.:
 
 ```groovy
 dependencies {
-	amp group: 'com.example', name: 'some-artifact', version: '1.0-SNAPSHOT'
+	ampLib group: 'com.example', name: 'some-artifact', version: '1.0-SNAPSHOT'
 }
 ```
+**Note** that *transitive* dependencies are **not** included for modules declared in the 'ampLib' configuration.
 
 ### Overlaying AMP Config and Web Sources
 
