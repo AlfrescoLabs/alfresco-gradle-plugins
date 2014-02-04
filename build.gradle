@@ -6,7 +6,7 @@ apply plugin: 'groovy'
 
 dependencies {
     compile gradleApi()
-    groovy localGroovy()
+    compile localGroovy()
 }
 
 group = groupId
