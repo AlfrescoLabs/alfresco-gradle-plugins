@@ -94,13 +94,13 @@ class AmpPlugin implements Plugin<Project> {
 		project.dependencies.add("compile", "org.springframework:spring-context:${project.springVersion}")
 		project.dependencies.add("compile", project.fileTree(dir: 'lib', include: '**/*.jar'))
 		project.dependencies.add("testCompile", "junit:junit:4.+")
-		project.configurations.add("ampLib")
+		project.configurations.create("ampLib")
 		project.configurations.ampLib.transitive = false
-        project.configurations.add("ampConfig")
+        project.configurations.create("ampConfig")
         project.dependencies.add("ampConfig", project.files("${project.sourceConfigDir}"))
-        project.configurations.add("ampConfigModule")
+        project.configurations.create("ampConfigModule")
         project.dependencies.add("ampConfigModule", project.files("${project.sourceConfigModuleDir}"))
-        project.configurations.add("ampWeb")
+        project.configurations.create("ampWeb")
         project.dependencies.add("ampWeb", project.files("${project.sourceWebDir}"))
 		
 		
