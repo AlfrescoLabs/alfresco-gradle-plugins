@@ -1,4 +1,4 @@
-This project is no longer under active development.  Please use https://github.com/xenit-eu/alfresco-gradle-sdk for an active grandle alfresco project.
+**Note:** This project is no longer under active development.  Please use https://github.com/xenit-eu/alfresco-gradle-sdk for an active grandle alfresco project.
 
 Overview
 --------
